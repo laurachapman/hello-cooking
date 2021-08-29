@@ -1,6 +1,6 @@
 from unicodedata import numeric
 
-def convertToDecimal(i):
+def convert_to_decimal(i):
 	if len(i) == 1:
 		v = numeric(i)
 	elif i[-1].isdigit():
@@ -13,24 +13,24 @@ class RecipeList:
 	def __init__(self, recipes=[]):
 		self.recipes = recipes
 		self.ingredient_dict = dict()
-		self.mergeIngredients(recipes)
+		self.merge_ingredients(recipes)
 
 	def add_recipe(self, recipe):
 		self.recipes.append(recipe)
-		self.mergeIngredients([recipe])
+		self.merge_ingredients([recipe])
 
-	def mergeIngredients(self, recipes):
+	def merge_ingredients(self, recipes):
 		for recipe in recipes:
 			for ingredient in recipe.ingredients:
 				if ingredient.name in self.ingredient_dict:
-					self.ingredient_dict[ingredient.name] += [ingredient.getQuantity()]
+					self.ingredient_dict[ingredient.name] += [ingredient.get_quantity()]
 				else:
-					self.ingredient_dict[ingredient.name] = [ingredient.getQuantity()]
+					self.ingredient_dict[ingredient.name] = [ingredient.get_quantity()]
 
-	def getPrintString(self):
+	def get_print_string(self):
 		ret = "Welcome to Bootleg Hello Fresh!\n\n"
 		ret += f"Your recipes:\n"
-		ret += self.getRecipeTitles()
+		ret += self.get_recipe_titles()
 		ret += f"Ingredient list:\n"
 		for ingredient in self.ingredient_dict:
 			string = ", ".join(self.ingredient_dict[ingredient])
@@ -39,18 +39,15 @@ class RecipeList:
 		ret += "\n\nSent to you with hello-cooking, a script by Laura Chapman: https://github.com/laurachapman/hello-cooking"
 		return ret
 
-	def printIngredients(self):
-		print(self.getPrintString())
+	def print_string(self):
+		print(self.get_print_string())
 
-	def getRecipeTitles(self):
+	def get_recipe_titles(self):
 		ret = ""
 		for recipe in self.recipes:
 			ret += f"- {recipe.name} ({recipe.url})\n"
 		ret += "\n"
 		return ret
-
-	def printRecipeTitles(self):
-		print(self.getRecipeTitles())
 
 class Recipe:
 	def __init__(self, name, ingredients, url):
@@ -69,8 +66,8 @@ class Recipe:
 class Ingredient:
 	def __init__(self, name, amount, unit):
 		self.name = name
-		self.amount = convertToDecimal(amount)
+		self.amount = convert_to_decimal(amount)
 		self.unit = unit
 
-	def getQuantity(self):
+	def get_quantity(self):
 		return f"{self.amount} {self.unit}"

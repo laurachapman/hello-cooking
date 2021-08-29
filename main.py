@@ -8,7 +8,7 @@ import smtplib, ssl
 from email.message import EmailMessage
 import getpass
 
-def sendEmail(sender_email, password, receiver_email, message, subject=""):
+def send_email(sender_email, password, receiver_email, message, subject=""):
 	# Sender email address must have less secure apps enabled
 	# https://www.google.com/settings/security/lesssecureapps
 	msg = EmailMessage()
@@ -22,7 +22,7 @@ def sendEmail(sender_email, password, receiver_email, message, subject=""):
 	server.send_message(msg)
 	server.quit()
 
-def getRecipes():
+def get_recipes():
 	URL = "https://www.hellofresh.com/menus/"
 	text = requests.get(URL).text
 	recipes = str(text).split("<h4")
@@ -34,10 +34,10 @@ def getRecipes():
 		recipe_titles.append(recipe[start:end])
 	return recipe_titles
 
-def chooseRecipes(recipes, k=3):
+def choose_recipes(recipes, k=3):
 	return random.sample(recipes, k)
 
-def getRecipeUrl(recipe):
+def get_recipe_url(recipe):
 	recipe_search = "https://www.google.com/search?q=hellofresh+" + recipe.replace(" ", "+")
 	text = requests.get(recipe_search).text
 	links = str(text).split("<a href=\"/url?q=")
@@ -45,7 +45,7 @@ def getRecipeUrl(recipe):
 	recipe_link = links[1][0:end]
 	return recipe_link	
 
-def getIngredientList(url):
+def get_ingredient_list(url):
 	recipe_page = requests.get(url)
 	ingredients = str(recipe_page.text).split(" alt=\"")
 	ingredient_list = []
@@ -83,21 +83,21 @@ recipient = input("Enter a recipient email: ")
 print(f"Getting {num_recipes} recipes ready for {recipient}...")
 
 my_recipe_list = RecipeList()
-recipe_choices = getRecipes()
-my_recipes = chooseRecipes(recipe_choices, num_recipes)
+recipe_choices = get_recipes()
+my_recipes = choose_recipes(recipe_choices, num_recipes)
 
 for recipe in my_recipes:
 	print(f"Getting url for {recipe}")
-	url = getRecipeUrl(recipe)
+	url = get_recipe_url(recipe)
 	print(f"Getting ingredients for {recipe}")
-	ingredient_list = getIngredientList(url)
+	ingredient_list = get_ingredient_list(url)
 	recipe_object = Recipe(recipe, ingredient_list, url)
 	my_recipe_list.add_recipe(recipe_object)
 
 print()
-print(my_recipe_list.getPrintString())
+print(my_recipe_list.get_print_string())
 
 print(f"Sending your meal plan to {recipient}...")
-sendEmail(sender, password, recipient, my_recipe_list.getPrintString(), "Your Hello Fresh recipes")
+send_email(sender, password, recipient, my_recipe_list.get_print_string(), "Your Hello Fresh recipes")
 print("Done.")
 
