@@ -4,6 +4,9 @@ Hello cooking is an app that grabs Hello Fresh's latest recipes and sends a cons
 
 ## Installation
 Clone the directory on your personal machine:
+```bash
+git clone git@github.com:laurachapman/hello-cooking.git
+```
 
 Install the dependencies with:
 
@@ -12,7 +15,7 @@ pip install -r requirements.txt
 ```
 
 ## Running
-From the hello-cooking directory, run
+From your hello-cooking directory, run
 ```bash
 python main.py
 ```
